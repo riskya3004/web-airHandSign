@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, flash, redirect, url_for, session, send_from_directory
+from flask import Flask, request, render_template, flash, redirect, url_for, session
 import bcrypt
 from werkzeug.utils import secure_filename
 import torch
@@ -303,29 +303,13 @@ def belajar_kategori(kategori):
         return {'error': 'Kategori tidak ditemukan.'}, 404
 
     folder_path = kategori_map[kategori]
-    media_files = []
+    gif_files = []
 
-    # Ambil file gif dan video dari folder yang sesuai
+    # Ambil file gif dari folder yang sesuai
     if os.path.exists(folder_path):
-        media_files = [f for f in os.listdir(folder_path) if f.endswith(('.gif', '.mp4'))]
+        gif_files = [f for f in os.listdir(folder_path) if f.endswith('.gif')]
 
-    return {'video_files': media_files}
-
-# Tambahkan route untuk melayani file statis dari folder angka_show, huruf_show, dan kata_show
-@app.route('/angka_show/<path:filename>')
-def angka_show_static(filename):
-    print(f"Serving video from angka_show: {filename}")
-    return send_from_directory('angka_show', filename)
-
-@app.route('/huruf_show/<path:filename>')
-def huruf_show_static(filename):
-    print(f"Serving video from huruf_show: {filename}")
-    return send_from_directory('huruf_show', filename)
-
-@app.route('/kata_show/<path:filename>')
-def kata_show_static(filename):
-    print(f"Serving video from kata_show: {filename}")
-    return send_from_directory('kata_show', filename)
+    return {'video_files': gif_files}
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

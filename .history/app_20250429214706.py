@@ -314,17 +314,14 @@ def belajar_kategori(kategori):
 # Tambahkan route untuk melayani file statis dari folder angka_show, huruf_show, dan kata_show
 @app.route('/angka_show/<path:filename>')
 def angka_show_static(filename):
-    print(f"Serving video from angka_show: {filename}")
     return send_from_directory('angka_show', filename)
 
 @app.route('/huruf_show/<path:filename>')
 def huruf_show_static(filename):
-    print(f"Serving video from huruf_show: {filename}")
     return send_from_directory('huruf_show', filename)
 
 @app.route('/kata_show/<path:filename>')
 def kata_show_static(filename):
-    print(f"Serving video from kata_show: {filename}")
     return send_from_directory('kata_show', filename)
 
 if __name__ == '__main__':

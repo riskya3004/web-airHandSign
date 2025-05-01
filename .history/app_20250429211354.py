@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, flash, redirect, url_for, session, send_from_directory
+from flask import Flask, request, render_template, flash, redirect, url_for, session
 import bcrypt
 from werkzeug.utils import secure_filename
 import torch
@@ -28,8 +28,8 @@ def save_user(email, username, hashed_password):
         f.write(f"{email},{username},{hashed_password}\n")
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = r'C:\Users\risky\OneDrive\Dokumen\~RPS\Binus\Skripsi\air_handsign_web-main-real\static\uploads'
-app.config['SUPPORT_SET_DIR'] = r"C:\Users\risky\OneDrive\Dokumen\~RPS\Binus\Skripsi\air_handsign_web-main-real\support_set"
+app.config['UPLOAD_FOLDER'] = r'C:\Users\bcamaster\Documents\Ardo\AIR-Handsign\Web\fsl_video_detection\static\uploads'
+app.config['SUPPORT_SET_DIR'] = r"C:\Users\bcamaster\Documents\Ardo\AIR-Handsign\Web\fsl_video_detection\support_set"
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # Batas ukuran file 50MB
 app.secret_key = "super_secret_key"
 
@@ -294,38 +294,23 @@ def belajar():
 def belajar_kategori(kategori):
     # Tentukan folder berdasarkan kategori
     kategori_map = {
-        'angka': 'angka_show',
-        'huruf': 'huruf_show',
-        'kata': 'kata_show'
+        'angka': [str(i) + '.gif' for i in range(1, 11)],
+        'huruf': [chr(i) + '.gif' for i in range(65, 91)],  # A-Z
+        'kata': ['Aku.gif', 'Cinta.gif', 'Kenapa.gif', 'Tidak.gif', 'Kecewa.gif']
     }
 
     if kategori not in kategori_map:
         return {'error': 'Kategori tidak ditemukan.'}, 404
 
-    folder_path = kategori_map[kategori]
-    media_files = []
+    folder_path = 'test_case'
+    gif_files = []
 
-    # Ambil file gif dan video dari folder yang sesuai
+    # Ambil file gif yang sesuai dengan pola kategori
     if os.path.exists(folder_path):
-        media_files = [f for f in os.listdir(folder_path) if f.endswith(('.gif', '.mp4'))]
+        all_files = os.listdir(folder_path)
+        gif_files = [f for f in all_files if f in kategori_map[kategori]]
 
-    return {'video_files': media_files}
-
-# Tambahkan route untuk melayani file statis dari folder angka_show, huruf_show, dan kata_show
-@app.route('/angka_show/<path:filename>')
-def angka_show_static(filename):
-    print(f"Serving video from angka_show: {filename}")
-    return send_from_directory('angka_show', filename)
-
-@app.route('/huruf_show/<path:filename>')
-def huruf_show_static(filename):
-    print(f"Serving video from huruf_show: {filename}")
-    return send_from_directory('huruf_show', filename)
-
-@app.route('/kata_show/<path:filename>')
-def kata_show_static(filename):
-    print(f"Serving video from kata_show: {filename}")
-    return send_from_directory('kata_show', filename)
+    return {'video_files': gif_files}
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

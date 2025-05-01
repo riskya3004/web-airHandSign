@@ -77,11 +77,12 @@
         {% endwith %}
         <div class="mt-4 text-center">
             {% if video_file %}
-            <!-- Removed the section displaying the detection result GIF -->
+            <h5>Hasil Deteksi:</h5>
+            <img src="{{ url_for('static', filename='uploads/' + video_file.replace('.mp4', '.gif')) }}" alt="Hasil Deteksi GIF" style="max-width: 100%; height: auto;">
             {% endif %}
         </div>
     </div>
-    <video id="video-preview" controls style="width: 100%; margin-top: 20px; display: none;"
+    <video id="video-preview" controls style="width: 100%; margin-top: 20px; display: block;"
         src="{{ url_for('static', filename='uploads/' + video_file) if video_file else '' }}"></video>
     <script>
         function previewVideo(event) {
